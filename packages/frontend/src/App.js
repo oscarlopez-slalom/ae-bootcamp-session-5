@@ -236,10 +236,10 @@ function App() {
           </List>
         </Card>
 
-        {/* INTENTIONAL ISSUE: Stats always show 0 instead of calculating from todos */}
+        {/* Stats show calculated values from todos */}
         <Box sx={{ mt: 3, display: 'flex', justifyContent: 'center', gap: 2 }}>
-          <Chip label={`${0} items left`} color="primary" />
-          <Chip label={`${0} completed`} color="success" />
+          <Chip label={`${todos?.filter(t => !t.completed).length || 0} items left`} color="primary" />
+          <Chip label={`${todos?.filter(t => t.completed).length || 0} completed`} color="success" />
         </Box>
       </Container>
     </Box>

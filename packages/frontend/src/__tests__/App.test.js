@@ -107,6 +107,35 @@ test('should show error message when todos fetch fails', async () => {
   expect(errorMessage).toBeInTheDocument();
 });
 
+test('should display correct stats for items left and completed', async () => {
+  const testQueryClient = createTestQueryClient();
+  
+  // Mock initial fetch with mixed todos
+  fetch.mockImplementationOnce(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve([
+        { id: 1, title: 'Task 1', completed: false, createdAt: new Date().toISOString() },
+        { id: 2, title: 'Task 2', completed: true, createdAt: new Date().toISOString() },
+        { id: 3, title: 'Task 3', completed: false, createdAt: new Date().toISOString() },
+      ]),
+    })
+  );
+  
+  render(
+    <QueryClientProvider client={testQueryClient}>
+      <App />
+    </QueryClientProvider>
+  );
+  
+  // Wait for todos to load
+  await screen.findByText('Task 1');
+  
+  // Check stats - 2 items left (incomplete), 1 completed
+  expect(screen.getByText('2 items left')).toBeInTheDocument();
+  expect(screen.getByText('1 completed')).toBeInTheDocument();
+});
+
 afterEach(() => {
   jest.clearAllMocks();
 });
