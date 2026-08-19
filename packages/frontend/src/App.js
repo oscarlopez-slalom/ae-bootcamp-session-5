@@ -217,6 +217,7 @@ function App() {
                   <IconButton
                     size="small"
                     color="primary"
+                    aria-label="edit"
                     onClick={() => console.log('Edit not implemented')}
                   >
                     <EditIcon />
@@ -224,6 +225,7 @@ function App() {
                   <IconButton
                     size="small"
                     color="error"
+                    aria-label="delete"
                     onClick={() => handleDeleteTodo(todo.id)}
                   >
                     <DeleteIcon />

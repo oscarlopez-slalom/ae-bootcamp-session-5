@@ -73,9 +73,8 @@ test('should call DELETE API when delete button is clicked', async () => {
     })
   );
   
-  // Find and click delete button (looks for DeleteIcon in MUI IconButton)
-  const deleteButtons = screen.getAllByRole('button');
-  const deleteButton = deleteButtons.find(btn => btn.querySelector('[data-testid="DeleteIcon"]'));
+  // Find and click delete button using aria-label
+  const deleteButton = screen.getByRole('button', { name: /delete/i });
   
   await user.click(deleteButton);
   
