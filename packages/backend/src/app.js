@@ -13,9 +13,6 @@ let todos = [];
 
 let nextId = 1;
 
-// INTENTIONAL LINT VIOLATION (for Step 5-2): Unused variable should be removed or used
-const unusedDebugFlag = true;
-
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.json({ status: 'ok' });
