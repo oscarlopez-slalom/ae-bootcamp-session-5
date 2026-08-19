@@ -27,11 +27,12 @@ module.exports = defineConfig({
       },
     },
   ],
-  webServer: {
-    command: 'npm run start',
-    cwd: path.resolve(__dirname, '..', '..'),
-    port: 3000,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120 * 1000,
-  },
+  // webServer disabled - services should be running via `npm start`
+  // webServer: {
+  //   command: 'npm run start',
+  //   cwd: path.resolve(__dirname, '..', '..'),
+  //   port: 3000,
+  //   reuseExistingServer: !process.env.CI,
+  //   timeout: 120 * 1000,
+  // },
 });

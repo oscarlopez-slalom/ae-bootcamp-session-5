@@ -31,9 +31,11 @@ const API_URL = 'http://localhost:3001/api/todos';
 const useTodos = () => {
   return useQuery({
     queryKey: ['todos'],
-    // INTENTIONAL ISSUE: Missing error handling in query
     queryFn: async () => {
       const response = await fetch(API_URL);
+      if (!response.ok) {
+        throw new Error('Failed to load todos');
+      }
       const data = await response.json();
       return data;
     },
@@ -45,7 +47,7 @@ function App() {
   const queryClient = useQueryClient();
 
   // Fetch todos using React Query
-  const { data: todos = [], isLoading } = useTodos();
+  const { data: todos = [], isLoading, error } = useTodos();
 
   // Mutation for adding a new todo
   const addTodoMutation = useMutation({
@@ -76,12 +78,14 @@ function App() {
     },
   });
 
-  // INTENTIONAL ISSUE: Delete mutation not implemented
+  // Mutation for deleting a todo
   const deleteTodoMutation = useMutation({
     mutationFn: async (id) => {
-      // TODO: Implement delete functionality
-      console.log('Delete todo:', id);
-      // Missing: await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
+      if (!response.ok) {
+        throw new Error('Failed to delete todo');
+      }
+      return response.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['todos'] });
@@ -147,12 +151,15 @@ function App() {
                 placeholder="What needs to be done?"
                 variant="outlined"
                 size="medium"
+                data-testid="todo-input"
+                inputProps={{ 'data-testid': 'todo-input' }}
               />
               <Button
                 type="submit"
                 variant="contained"
                 startIcon={<AddIcon />}
                 sx={{ minWidth: 120 }}
+                data-testid="add-button"
               >
                 Add
               </Button>
@@ -161,18 +168,27 @@ function App() {
         </Card>
 
         {isLoading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', my: 4 }} data-testid="loading-spinner">
             <CircularProgress />
+          </Box>
+        )}
+
+        {error && (
+          <Box sx={{ p: 2, mb: 3, bgcolor: 'error.light', borderRadius: 1 }}>
+            <Typography color="error.dark">
+              Failed to load todos. Please check your connection and try again.
+            </Typography>
           </Box>
         )}
 
         {/* INTENTIONAL ISSUE: No empty state message when todos.length === 0 */}
 
         <Card>
-          <List sx={{ p: 0 }}>
+          <List sx={{ p: 0 }} data-testid="todo-list">
             {todos.map((todo, index) => (
               <ListItem
                 key={todo.id}
+                data-testid={`todo-item-${todo.id}`}
                 sx={{
                   borderBottom: index < todos.length - 1 ? 1 : 0,
                   borderColor: 'divider',
@@ -185,6 +201,7 @@ function App() {
                   checked={todo.completed}
                   onChange={() => handleToggleTodo(todo.id)}
                   sx={{ mr: 2 }}
+                  data-testid={`todo-checkbox-${todo.id}`}
                 />
                 <Typography
                   sx={{
@@ -192,6 +209,7 @@ function App() {
                     textDecoration: todo.completed ? 'line-through' : 'none',
                     color: todo.completed ? 'text.secondary' : 'text.primary',
                   }}
+                  data-testid={`todo-title-${todo.id}`}
                 >
                   {todo.title}
                 </Typography>
