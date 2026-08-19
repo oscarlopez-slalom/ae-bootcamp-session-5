@@ -161,4 +161,31 @@ Use this template when adding new session summaries:
 
 ---
 
+### Session: Step 5-0 & 5-1 Completion
+**Date**: 2026-08-19  
+**Issue/PR**: Exercise Issue #1
+
+**What Was Accomplished**:
+- Completed Step 5-0: Bootstrap agentic workflow infrastructure
+- Completed Step 5-1: Backend TDD workflow (all tests passing)
+- Fixed frontend delete functionality (APPLICATION DEFECT)
+- Added error handling UI for network failures (APPLICATION DEFECT)
+- Created 5 UI journey tests using Page Object Model
+- Implemented TodoPage.js with centralized selectors
+
+**Key Findings**:
+- Agent handoff pattern: tdd-developer for implementation, test-engineer for UI tests
+- UI test timing issues: Wait for DOM state before querying elements
+- Frontend mutations need actual fetch calls, not just console.log stubs
+- Error handling requires both error throwing and UI display components
+
+**Outcomes**:
+- Backend: 15/15 tests passing ✅
+- Frontend RTL: 3/3 tests passing ✅
+- UI Playwright: 5/5 tests passing ✅
+- All workflow automation infrastructure operational
+- Ready for Step 5-2 (lint and code quality)
+
+---
+
 <!-- Add new session summaries below this line -->
